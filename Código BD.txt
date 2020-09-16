@@ -1,0 +1,392 @@
+-- Generado por Oracle SQL Developer Data Modeler 18.1.0.082.1035
+--   en:        2020-09-13 18:34:29 CLST
+--   sitio:      Oracle Database 11g
+--   tipo:      Oracle Database 11g
+
+
+
+CREATE TABLE contrat_person (
+    rut_person      VARCHAR2(20) NOT NULL,
+    first_name      VARCHAR2(20) NOT NULL,
+    last_name       VARCHAR2(20) NOT NULL,
+    email_contrat   VARCHAR2(20) NOT NULL,
+    phone_contrat   NUMBER(10) NOT NULL
+);
+
+ALTER TABLE contrat_person ADD CONSTRAINT contrat_person_pk PRIMARY KEY ( rut_person );
+
+CREATE TABLE contratos (
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL,
+    id_contrat                  NUMBER(8) NOT NULL,
+    emision_contrat             DATE NOT NULL,
+    fin_contrat                 DATE NOT NULL,
+    contrat_person_rut_person   VARCHAR2(20) NOT NULL
+);
+
+ALTER TABLE contratos ADD CONSTRAINT contratos_pk PRIMARY KEY ( id_contrat );
+
+CREATE TABLE dat_personal (
+    id_dat      VARCHAR2(10) NOT NULL,
+    first_nom   VARCHAR2(15) NOT NULL,
+    ape_mat     VARCHAR2(15) NOT NULL,
+    ape_pat     VARCHAR2(15) NOT NULL
+);
+
+ALTER TABLE dat_personal ADD CONSTRAINT dat_personal_pk PRIMARY KEY ( id_dat );
+
+CREATE TABLE detall_compra (
+    id_detall               NUMBER(7) NOT NULL,
+    proces_venta_id_venta   NUMBER(9) NOT NULL,
+    fecha_detall            DATE NOT NULL,
+    nom_producto            VARCHAR2(15) NOT NULL,
+    cost_producto           NUMBER(7) NOT NULL,
+    iva_producto            NUMBER(7) NOT NULL,
+    total_compra            NUMBER(7) NOT NULL
+);
+
+CREATE UNIQUE INDEX detall_compra__idx ON
+    detall_compra (
+        proces_venta_id_venta
+    ASC );
+
+ALTER TABLE detall_compra ADD CONSTRAINT detall_compra_pk PRIMARY KEY ( id_detall );
+
+CREATE TABLE direc_extran (
+    vent_extran_id_vent_ex   VARCHAR2(10) NOT NULL,
+    id_direc                 VARCHAR2(20) NOT NULL,
+    pais                     VARCHAR2(20) NOT NULL,
+    direc_cli                VARCHAR2(20) NOT NULL,
+    num_calle                NUMBER(7),
+    depto                    VARCHAR2(10),
+    localidad                VARCHAR2(20) NOT NULL
+);
+
+ALTER TABLE direc_extran ADD CONSTRAINT direc_extran_pk PRIMARY KEY ( id_direc );
+
+CREATE TABLE direc_local (
+    id_direc                 VARCHAR2(20) NOT NULL,
+    direc_cli                VARCHAR2(20) NOT NULL,
+    num_calle                NUMBER(7),
+    depto                    VARCHAR2(10),
+    region                   VARCHAR2(20) NOT NULL,
+    comuna                   VARCHAR2(20) NOT NULL,
+    vent_local_id_vent_loc   VARCHAR2(10) NOT NULL
+);
+
+ALTER TABLE direc_local ADD CONSTRAINT direc_local_pk PRIMARY KEY ( id_direc );
+
+CREATE TABLE pedido (
+    id_pedido                   NUMBER(8) NOT NULL,
+    nom_prod_pedido             VARCHAR2(20) NOT NULL,
+    cant_prod                   NUMBER(8) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+ALTER TABLE pedido ADD CONSTRAINT pedido_pk PRIMARY KEY ( id_pedido );
+
+CREATE TABLE proces_venta (
+    id_venta                    NUMBER(9) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+ALTER TABLE proces_venta ADD CONSTRAINT proces_venta_pk PRIMARY KEY ( id_venta );
+
+CREATE TABLE productos (
+    id_prod                     NUMBER(8) NOT NULL,
+    nom_prod                    VARCHAR2(20) NOT NULL,
+    precio_prod                 NUMBER(9) NOT NULL,
+    stock_prod                  NUMBER(9) NOT NULL,
+    transporte_id_trans         NUMBER(7) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+ALTER TABLE productos ADD CONSTRAINT productos_pk PRIMARY KEY ( id_prod );
+
+CREATE TABLE registro (
+    email                 VARCHAR2(20) NOT NULL,
+    dat_personal_id_dat   VARCHAR2(10) NOT NULL,
+    password              VARCHAR2(20) NOT NULL,
+    confir_contra         VARCHAR2(20) NOT NULL
+);
+
+CREATE UNIQUE INDEX registro__idx ON
+    registro (
+        dat_personal_id_dat
+    ASC );
+
+ALTER TABLE registro ADD CONSTRAINT registro_pk PRIMARY KEY ( email,
+                                                              password );
+
+CREATE TABLE report_merma (
+    id_merma                    NUMBER(8) NOT NULL,
+    fecha_merma                 DATE NOT NULL,
+    descrip_merma               VARCHAR2(40) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+ALTER TABLE report_merma ADD CONSTRAINT report_merma_pk PRIMARY KEY ( id_merma );
+
+CREATE TABLE report_venta (
+    id_report_vent              NUMBER(8) NOT NULL,
+    prod_venta                  VARCHAR2(20) NOT NULL,
+    cant_venta                  NUMBER(8) NOT NULL,
+    total_venta                 NUMBER(8) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+ALTER TABLE report_venta ADD CONSTRAINT report_venta_pk PRIMARY KEY ( id_report_vent );
+
+CREATE TABLE reportes (
+    id_report        NUMBER(8) NOT NULL,
+    fecha_report     DATE NOT NULL,
+    tip_report       VARCHAR2(15) NOT NULL,
+    user_report      VARCHAR2(15) NOT NULL,
+    descrip_report   VARCHAR2(30) NOT NULL
+);
+
+ALTER TABLE reportes ADD CONSTRAINT reportes_pk PRIMARY KEY ( id_report );
+
+CREATE TABLE segui_prod (
+    productos_id_prod             NUMBER(8) NOT NULL,
+    est_segui                     VARCHAR2(15) NOT NULL,
+    seguimiento_est_seguimiento   VARCHAR2(20) NOT NULL
+);
+
+CREATE TABLE seguimiento (
+    est_seguimiento             VARCHAR2(20) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL,
+    pedido_id_pedido            NUMBER(8) NOT NULL
+);
+
+ALTER TABLE seguimiento ADD CONSTRAINT seguimiento_pk PRIMARY KEY ( est_seguimiento );
+
+CREATE TABLE suba_trans (
+    subastas_id_sub             NUMBER(9) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+CREATE TABLE subastas (
+    id_sub                      NUMBER(9) NOT NULL,
+    min_postor                  NUMBER(9) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+ALTER TABLE subastas ADD CONSTRAINT subastas_pk PRIMARY KEY ( id_sub );
+
+CREATE TABLE transporte (
+    id_trans                    NUMBER(7) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL,
+    tip_transporte              VARCHAR2(15) NOT NULL,
+    tamaño_trans                NUMBER(8) NOT NULL,
+    capacidad_trans             NUMBER(8) NOT NULL,
+    refrigeracion_trans         VARCHAR2(10) NOT NULL,
+    subastas_id_sub             NUMBER(9) NOT NULL,
+    fecha_trans                 DATE NOT NULL
+);
+
+ALTER TABLE transporte ADD CONSTRAINT transporte_pk PRIMARY KEY ( id_trans );
+
+CREATE TABLE user_report (
+    reportes_id_report          NUMBER(8) NOT NULL,
+    usuarios_usuarios_id_user   NUMBER(8) NOT NULL
+);
+
+CREATE TABLE usuarios_usuarios (
+    id_user             NUMBER(8) NOT NULL,
+    registro_password   VARCHAR2(20) NOT NULL,
+    last_login          DATE NOT NULL,
+    is_superuser        NUMBER(1) NOT NULL,
+    username            VARCHAR2(20) NOT NULL,
+    registro_email      VARCHAR2(20) NOT NULL,
+    first_name          VARCHAR2(20) NOT NULL,
+    last_name           VARCHAR2(20) NOT NULL,
+    direccion           VARCHAR2(20) NOT NULL,
+    is_active           NUMBER(1) NOT NULL,
+    is_staff            NUMBER(1) NOT NULL,
+    tipo_usuario        VARCHAR2(20) NOT NULL
+);
+
+ALTER TABLE usuarios_usuarios ADD CONSTRAINT usuarios_usuarios_pk PRIMARY KEY ( id_user );
+
+CREATE TABLE vent_extran (
+    id_vent_ex              VARCHAR2(10) NOT NULL,
+    proces_venta_id_venta   NUMBER(9) NOT NULL,
+    nom_cli                 VARCHAR2(20) NOT NULL,
+    ape_pat                 VARCHAR2(20) NOT NULL,
+    ape_mat                 VARCHAR2(20) NOT NULL,
+    email                   VARCHAR2(20) NOT NULL
+);
+
+ALTER TABLE vent_extran ADD CONSTRAINT vent_extran_pk PRIMARY KEY ( id_vent_ex );
+
+CREATE TABLE vent_local (
+    id_vent_loc             VARCHAR2(10) NOT NULL,
+    proces_venta_id_venta   NUMBER(9) NOT NULL,
+    nom_cli                 VARCHAR2(20) NOT NULL,
+    ape_pat                 VARCHAR2(20) NOT NULL,
+    ape_mat                 VARCHAR2(20) NOT NULL,
+    email                   VARCHAR2(20) NOT NULL
+);
+
+ALTER TABLE vent_local ADD CONSTRAINT vent_local_pk PRIMARY KEY ( id_vent_loc );
+
+ALTER TABLE contratos
+    ADD CONSTRAINT contratos_contrat_person_fk FOREIGN KEY ( contrat_person_rut_person )
+        REFERENCES contrat_person ( rut_person );
+
+ALTER TABLE contratos
+    ADD CONSTRAINT contratos_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE detall_compra
+    ADD CONSTRAINT detall_compra_proces_venta_fk FOREIGN KEY ( proces_venta_id_venta )
+        REFERENCES proces_venta ( id_venta );
+
+ALTER TABLE direc_extran
+    ADD CONSTRAINT direc_extran_vent_extran_fk FOREIGN KEY ( vent_extran_id_vent_ex )
+        REFERENCES vent_extran ( id_vent_ex );
+
+ALTER TABLE direc_local
+    ADD CONSTRAINT direc_local_vent_local_fk FOREIGN KEY ( vent_local_id_vent_loc )
+        REFERENCES vent_local ( id_vent_loc );
+
+ALTER TABLE pedido
+    ADD CONSTRAINT pedido_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE proces_venta
+    ADD CONSTRAINT proces_venta_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE productos
+    ADD CONSTRAINT productos_transporte_fk FOREIGN KEY ( transporte_id_trans )
+        REFERENCES transporte ( id_trans );
+
+ALTER TABLE productos
+    ADD CONSTRAINT productos_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE registro
+    ADD CONSTRAINT registro_dat_personal_fk FOREIGN KEY ( dat_personal_id_dat )
+        REFERENCES dat_personal ( id_dat );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE report_merma
+    ADD CONSTRAINT report_merma_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE report_venta
+    ADD CONSTRAINT report_venta_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE segui_prod
+    ADD CONSTRAINT segui_prod_productos_fk FOREIGN KEY ( productos_id_prod )
+        REFERENCES productos ( id_prod );
+
+ALTER TABLE segui_prod
+    ADD CONSTRAINT segui_prod_seguimiento_fk FOREIGN KEY ( seguimiento_est_seguimiento )
+        REFERENCES seguimiento ( est_seguimiento );
+
+ALTER TABLE seguimiento
+    ADD CONSTRAINT seguimiento_pedido_fk FOREIGN KEY ( pedido_id_pedido )
+        REFERENCES pedido ( id_pedido );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE seguimiento
+    ADD CONSTRAINT seguimiento_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE suba_trans
+    ADD CONSTRAINT suba_trans_subastas_fk FOREIGN KEY ( subastas_id_sub )
+        REFERENCES subastas ( id_sub );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE suba_trans
+    ADD CONSTRAINT suba_trans_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE subastas
+    ADD CONSTRAINT subastas_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE transporte
+    ADD CONSTRAINT transporte_subastas_fk FOREIGN KEY ( subastas_id_sub )
+        REFERENCES subastas ( id_sub );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE transporte
+    ADD CONSTRAINT transporte_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE user_report
+    ADD CONSTRAINT user_report_reportes_fk FOREIGN KEY ( reportes_id_report )
+        REFERENCES reportes ( id_report );
+
+--  ERROR: FK name length exceeds maximum allowed length(30) 
+ALTER TABLE user_report
+    ADD CONSTRAINT user_report_usuarios_usuarios_fk FOREIGN KEY ( usuarios_usuarios_id_user )
+        REFERENCES usuarios_usuarios ( id_user );
+
+ALTER TABLE usuarios_usuarios
+    ADD CONSTRAINT usuarios_usuarios_registro_fk FOREIGN KEY ( registro_email,
+                                                               registro_password )
+        REFERENCES registro ( email,
+                              password );
+
+ALTER TABLE vent_extran
+    ADD CONSTRAINT vent_extran_proces_venta_fk FOREIGN KEY ( proces_venta_id_venta )
+        REFERENCES proces_venta ( id_venta );
+
+ALTER TABLE vent_local
+    ADD CONSTRAINT vent_local_proces_venta_fk FOREIGN KEY ( proces_venta_id_venta )
+        REFERENCES proces_venta ( id_venta );
+
+--  ERROR: No Discriminator Column found in Arc Arc_1 - constraint trigger for Arc cannot be generated 
+
+--  ERROR: No Discriminator Column found in Arc Arc_1 - constraint trigger for Arc cannot be generated
+
+
+
+-- Informe de Resumen de Oracle SQL Developer Data Modeler: 
+-- 
+-- CREATE TABLE                            22
+-- CREATE INDEX                             2
+-- ALTER TABLE                             45
+-- CREATE VIEW                              0
+-- ALTER VIEW                               0
+-- CREATE PACKAGE                           0
+-- CREATE PACKAGE BODY                      0
+-- CREATE PROCEDURE                         0
+-- CREATE FUNCTION                          0
+-- CREATE TRIGGER                           0
+-- ALTER TRIGGER                            0
+-- CREATE COLLECTION TYPE                   0
+-- CREATE STRUCTURED TYPE                   0
+-- CREATE STRUCTURED TYPE BODY              0
+-- CREATE CLUSTER                           0
+-- CREATE CONTEXT                           0
+-- CREATE DATABASE                          0
+-- CREATE DIMENSION                         0
+-- CREATE DIRECTORY                         0
+-- CREATE DISK GROUP                        0
+-- CREATE ROLE                              0
+-- CREATE ROLLBACK SEGMENT                  0
+-- CREATE SEQUENCE                          0
+-- CREATE MATERIALIZED VIEW                 0
+-- CREATE SYNONYM                           0
+-- CREATE TABLESPACE                        0
+-- CREATE USER                              0
+-- 
+-- DROP TABLESPACE                          0
+-- DROP DATABASE                            0
+-- 
+-- REDACTION POLICY                         0
+-- 
+-- ORDS DROP SCHEMA                         0
+-- ORDS ENABLE SCHEMA                       0
+-- ORDS ENABLE OBJECT                       0
+-- 
+-- ERRORS                                   9
+-- WARNINGS                                 0
